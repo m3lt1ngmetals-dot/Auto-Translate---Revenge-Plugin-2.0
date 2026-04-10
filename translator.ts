@@ -1,8 +1,16 @@
-export async function translate(text: string, targetLang: string) {
-    const res = await fetch(
-        `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
-    );
+export async function translate(text: string, target: string) {
 
+    const url =
+        "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" +
+        target +
+        "&dt=t&q=" +
+        encodeURIComponent(text);
+
+    const res = await fetch(url);
     const data = await res.json();
-    return data[0].map((x: any) => x[0]).join("");
+
+    return {
+        translated: data[0].map((t: any) => t[0]).join(""),
+        detected: data[2]
+    };
 }
